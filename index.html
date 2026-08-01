@@ -8,10 +8,10 @@
 </head>
 <body>
 
+  <!-- Header & Navigation -->
   <header class="navbar">
     <h1 class="logo">CINEMA STREAM</h1>
     
-    <!-- Filter & Search Controls -->
     <div class="controls">
       <input type="text" id="searchInput" placeholder="ရုပ်ရှင် / စီးရီး ရှာရန်...">
       
@@ -26,20 +26,21 @@
     </div>
   </header>
 
+  <!-- Movie Cards Display -->
   <main class="container">
     <div id="movieGrid" class="movie-grid">
       <p class="loading">ရုပ်ရှင်များကို ခေါ်ယူနေပါသည်။ ခေတ္တစောင့်ဆိုင်းပေးပါ...</p>
     </div>
   </main>
 
-  <!-- Video Player Modal (Ads မပါသော Player) -->
+  <!-- VidSrc.pro Embedded Video Player Modal -->
   <div id="playerModal" class="modal">
     <div class="modal-content">
       <span class="close-btn" id="closeModal">&times;</span>
-      <iframe id="videoIframe" src="" frameborder="0" allowfullscreen></iframe>
+      <iframe id="videoIframe" src="" frameborder="0" allowfullscreen allow="autoplay; encrypted-media"></iframe>
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <script src="script.js?v=2"></script>
 </body>
 </html>
