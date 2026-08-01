@@ -3,28 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cinema Stream - Movies & TV Series</title>
+  <title>Cinema Stream</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- Header Section -->
+  <!-- Navbar -->
   <header class="navbar">
-    <div class="logo">🍿 CINEMA STREAM</div>
-    
-    <!-- Filter Section (Movies / Series Switcher) -->
-    <div class="filter-container">
-      <select id="typeSelect" onchange="loadMedia()">
-        <option value="movie">🎬 Movies (ရုပ်ရှင်များ)</option>
-        <option value="tv">📺 TV Series (စီးရီးများ)</option>
-      </select>
-    </div>
+    <h1 class="logo">CINEMA STREAM</h1>
   </header>
 
-  <!-- Movie/Series Grid Container -->
+  <!-- Movie Grid -->
   <main class="container">
     <div id="movieGrid" class="movie-grid">
-      <!-- Media Cards များကို JavaScript မှ Dynamic ထည့်ပေးမည် -->
+      <p class="loading">ရုပ်ရှင်များကို ခေါ်ယူနေပါသည်။ ခေတ္တစောင့်ဆိုင်းပေးပါ...</p>
     </div>
   </main>
 
