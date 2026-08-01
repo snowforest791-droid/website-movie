@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CineStream - Movies & Series</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top Navbar -->
+  <nav class="navbar">
+    <div class="logo">Cine<span>Stream</span></div>
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="ရုပ်ရှင်များ ရှာဖွေရန်..." onkeyup="searchMovie()">
+    </div>
+  </nav>
+
+  <!-- Filter Section -->
+  <div class="filter-container">
+    <select id="typeSelect" onchange="applyFilter()">
+      <option value="movie">🎬 Movies (ရုပ်ရှင်များ)</option>
+      <option value="tv">📺 TV Series (စီးရီးများ)</option>
+    </select>
+
+    <select id="genreSelect" onchange="applyFilter()">
+      <option value="">အမျိုးအစား အားလုံး (All Genres)</option>
+    </select>
+
+    <select id="yearSelect" onchange="applyFilter()">
+      <option value="">ခုနှစ် အားလုံး (All Years)</option>
+      <option value="2026">2026</option>
+      <option value="2025">2025</option>
+      <option value="2024">2024</option>
+      <option value="2023">2023</option>
+      <option value="2022">2022</option>
+    </select>
+  </div>
+
+  <!-- Movie Cards Display -->
+  <main class="container">
+    <div class="movie-grid" id="movieGrid"></div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
