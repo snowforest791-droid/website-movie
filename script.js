@@ -1,6 +1,8 @@
+// ==========================================
+// ၁။ TMDB API Key & Custom Direct Links
+// ==========================================
 const TMDB_API_KEY = "a671d00101a4c0b0dbb5ed9703441f3d";
 
-// အစ်ကို့ရဲ့ ကိုယ်ပိုင် Manual Link များ (မရှိပါက Auto Player ဖြင့် ပွင့်မည်)
 const myMovieLinks = {
   "1083381": "https://t.me/c/4351330970/6/60", // Backrooms
   "1339713": "https://t.me/c/4351330970/6/39", // Obsessions
@@ -8,13 +10,15 @@ const myMovieLinks = {
   "1259253": "https://t.me/c/4351330970/6/59"  // Passenger
 };
 
-let currentType = "movie"; // 'movie' သို့မဟုတ် 'tv'
+let currentType = "movie";
 
+// ==========================================
+// ၂။ App Initialization
+// ==========================================
 document.addEventListener("DOMContentLoaded", () => {
   fetchGenres();
   fetchContent();
 
-  // Event Listeners
   document.getElementById("typeSelect").addEventListener("change", (e) => {
     currentType = e.target.value;
     fetchGenres();
@@ -24,32 +28,36 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("genreSelect").addEventListener("change", fetchContent);
   
   let delayTimer;
-  document.getElementById("searchInput").addEventListener("input", (e) => {
+  document.getElementById("searchInput").addEventListener("input", () => {
     clearTimeout(delayTimer);
-    delayTimer = setTimeout(() => {
-      fetchContent();
-    }, 500);
+    delayTimer = setTimeout(fetchContent, 500);
   });
 
   document.getElementById("closeModal").addEventListener("click", closeModal);
 });
 
-// Genres (အမျိုးအစား) ခေါ်ယူခြင်း
+// ==========================================
+// ၃။ Genre List Fetching
+// ==========================================
 async function fetchGenres() {
   const genreSelect = document.getElementById("genreSelect");
   try {
     const res = await fetch(`https://api.themoviedb.org/3/genre/${currentType}/list?api_key=${TMDB_API_KEY}&language=en-US`);
     const data = await res.json();
     genreSelect.innerHTML = `<option value="">အမျိုးအစား အားလုံး</option>`;
-    data.genres.forEach(g => {
-      genreSelect.innerHTML += `<option value="${g.id}">${g.name}</option>`;
-    });
+    if (data.genres) {
+      data.genres.forEach(g => {
+        genreSelect.innerHTML += `<option value="${g.id}">${g.name}</option>`;
+      });
+    }
   } catch (err) {
     console.error("Genre fetch error:", err);
   }
 }
 
-// ရုပ်ရှင်/စီးရီးများ ခေါ်ယူခြင်း
+// ==========================================
+// ၄။ Movie & TV Show Display
+// ==========================================
 async function fetchContent() {
   const grid = document.getElementById("movieGrid");
   const searchQuery = document.getElementById("searchInput").value.trim();
@@ -95,11 +103,11 @@ async function fetchContent() {
       card.addEventListener("click", () => {
         const idStr = String(item.id);
         
-        // ၁။ Manual Link ရှိလျှင် ထို Link သို့ တိုက်ရိုက်သွားမည်
+        // Manual Link ရှိပါက Telegram/Drive Link သို့ တိုက်ရိုက်သွားမည်
         if (myMovieLinks[idStr]) {
           window.open(myMovieLinks[idStr], "_blank");
         } 
-        // ၂။ မရှိပါက Ads အနည်းဆုံး Auto Embed Player ဖြင့် ပွင့်မည်
+        // မရှိပါက VidSrc.pro Auto Embed Player ဖြင့် ပွင့်မည်
         else {
           playAutoEmbed(item.id, currentType);
         }
@@ -114,15 +122,20 @@ async function fetchContent() {
   }
 }
 
-// Ads မပါ/နည်းသော Auto Embed Player သို့ ချိတ်ဆက်ပေးခြင်း
+// ==========================================
+// ၅။ VidSrc Auto Player Control
+// ==========================================
 function playAutoEmbed(id, type) {
   const modal = document.getElementById("playerModal");
   const iframe = document.getElementById("videoIframe");
   
-  // ပိုမို အဆင်ပြေပြီး မပိတ်နိုင်သော VidSrc Server
-let embedUrl = `https://www.2embed.cc/embed/${id}`;
-if (type === 'tv') {
-  embedUrl = `https://www.2embed.cc/embedtv/${id}&s=1&e=1`;
+  let embedUrl = `https://vidsrc.pro/embed/${type}/${id}`;
+  if (type === 'tv') {
+    embedUrl += `/1/1`;
+  }
+
+  iframe.src = embedUrl;
+  modal.style.display = "flex";
 }
 
 function closeModal() {
