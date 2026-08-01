@@ -120,13 +120,9 @@ function playAutoEmbed(id, type) {
   const iframe = document.getElementById("videoIframe");
   
   // ပိုမို အဆင်ပြေပြီး မပိတ်နိုင်သော VidSrc Server
-  let embedUrl = `https://vidsrc.cc/v2/embed/${type}/${id}`;
-  if (type === 'tv') {
-    embedUrl += `/1/1`; // TV series အတွက် S1, E1
-  }
-
-  iframe.src = embedUrl;
-  modal.style.display = "flex";
+let embedUrl = `https://www.2embed.cc/embed/${id}`;
+if (type === 'tv') {
+  embedUrl = `https://www.2embed.cc/embedtv/${id}&s=1&e=1`;
 }
 
 function closeModal() {
