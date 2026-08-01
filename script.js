@@ -114,15 +114,15 @@ async function fetchContent() {
   }
 }
 
-// Ads မပါ/နည်းသော VidSrc Embed Player သို့ ချိတ်ဆက်ပေးခြင်း
+// Ads မပါ/နည်းသော Auto Embed Player သို့ ချိတ်ဆက်ပေးခြင်း
 function playAutoEmbed(id, type) {
   const modal = document.getElementById("playerModal");
   const iframe = document.getElementById("videoIframe");
   
-  // vidsrc.pro သို့မဟုတ် vidsrc.cc (Ads ကင်းစင်ပြီး တိုက်ရိုက် ကြည့်နိုင်သည်)
-  let embedUrl = `https://vidsrc.pro/embed/${type}/${id}`;
+  // ပိုမို အဆင်ပြေပြီး မပိတ်နိုင်သော VidSrc Server
+  let embedUrl = `https://vidsrc.cc/v2/embed/${type}/${id}`;
   if (type === 'tv') {
-    embedUrl += `/1/1`; // TV series အတွက် Season 1, Episode 1 ကို Default ဖွင့်ပေးမည်
+    embedUrl += `/1/1`; // TV series အတွက် S1, E1
   }
 
   iframe.src = embedUrl;
