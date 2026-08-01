@@ -8,6 +8,7 @@ const myMovieLinks = {
   "1083381": "https://t.me/c/4351330970/6/60",   // backrooms
   "299536": "https://drive.google.com/file/d/xxx",  // Avengers
   "76600":  "https://mega.nz/file/xxx"              // Avatar
+  "1368314": "https://t.me/c/4351330970/6/59",     //Passenger
 };
 
 
