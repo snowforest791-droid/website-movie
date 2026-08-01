@@ -1,87 +1,82 @@
-// ==========================================
+// ===================================================
 // ၁။ API Key နှင့် ကိုယ်ပိုင် Link များ ထည့်ရန်နေရာ
-// ==========================================
-const TMDB_API_KEY = "a671d00101a4c0b0dbb5ed9703441f3d"; // သင့် TMDb API Key ထည့်ပါ
+// ===================================================
+const TMDB_API_KEY = "a671d00101a4c0b0dbb5ed9703441f3d"; 
 
-// 🌟 ဒီနေရာမှာ ရုပ်ရှင် ID နံပါတ်နဲ့ Link ကို ယှဉ်ထည့်ပေးရုံပါပဲ 🌟
+// 🌟 ဒီနေရာမှာ ရုပ်ရှင် သို့မဟုတ် စီးရီး ID နံပါတ်နဲ့ Link ကို ယှဉ်ထည့်ပေးရုံပါပဲ 🌟
 const myMovieLinks = {
-  // Movies
-  "1083381": "https://t.me/c/4351330970/6/60",   // backrooms
-  "1127384": "https://t.me/c/4351330970/6/7",  // deep water
-  "1227877": "https://t.me/c/4351330970/6/33",  // i love booster
-  "1202033": "https://t.me/c/4351330970/6/41"     //enola 3
-  
-  // TV Series
-"278178": "https://t.me/c/4351330970/16/24",   // i will find you (TV Series))
+  // Movies (ရုပ်ရှင်များ)
+  "1083381": "https://t.me/c/4351330970/6/60", // Backrooms
+  "1339713": "https://t.me/c/4351330970/6/39", // Obsessions
+  "1202033": "https://t.me/c/4351330970/6/41", // Enola Holmes 3
+  "1259253": "https://t.me/c/4351330970/6/59", // Passenger (2026)
+
+  // TV Series (စီးရီးများ)
+  "119051":  "https://t.me/c/4351330970/6/70", // Wednesday (ဥပမာ)
+  "94605":   "https://t.me/c/4351330970/6/71"  // Arcane (ဥပမာ)
 };
 
-
-// ==========================================
-// ၂။ ရုပ်ရှင်များ ခေါ်ယူပြသခြင်း (အရှင်းဆုံး ပုံစံ)
-// ==========================================
-async function fetchMovies(url = `https://api.themoviedb.org/3/movie/popular?api_key=${TMDB_API_KEY}`) {
+// ===================================================
+// ၂။ Movies / TV Series များ ခေါ်ယူပြသခြင်း
+// ===================================================
+async function loadMedia() {
   const grid = document.getElementById("movieGrid");
+  const typeSelect = document.getElementById("typeSelect");
   
+  // Dropdown မှ ရွေးထားသော အမျိုးအစားကို ယူမည် (Default က 'movie')
+  const mediaType = typeSelect ? typeSelect.value : "movie";
+  
+  // TMDb API URL (Movies သို့မဟုတ် TV Series)
+  const url = `https://api.themoviedb.org/3/discover/${mediaType}?api_key=${TMDB_API_KEY}&language=en-US&sort_by=popularity.desc`;
+
   try {
     const res = await fetch(url);
     const data = await res.json();
-    
+
     grid.innerHTML = ""; // အဟောင်းများကို ရှင်းထုတ်မည်
 
-    data.results.forEach(movie => {
+    data.results.forEach(item => {
       const card = document.createElement("div");
       card.className = "movie-card";
 
-      // ရုပ်ရှင် Poster နှင့် စာအချက်အလက်များ
-      const poster = movie.poster_path ? `https://image.tmdb.org/tpb/t/p/w500${movie.poster_path}` : 'https://via.placeholder.com/500x750';
-      const year = (movie.release_date || "").split("-")[0] || "N/A";
-      const rating = movie.vote_average ? movie.vote_average.toFixed(1) : "NR";
+      // Movie တွင် 'title' / Series တွင် 'name' ကို ယူမည်
+      const title = item.title || item.name;
+      
+      // Movie တွင် 'release_date' / Series တွင် 'first_air_date' ကို ယူမည်
+      const rawDate = item.release_date || item.first_air_date || "";
+      const year = rawDate ? rawDate.split('-')[0] : "N/A";
+      
+      // Poster ပုံရိပ်
+      const posterPath = item.poster_path 
+        ? `https://image.tmdb.org/t500${item.poster_path}` 
+        : 'https://via.placeholder.com/500x750?text=No+Poster';
 
+      // Card Element တည်ဆောက်ခြင်း
       card.innerHTML = `
-        <div class="poster-box">
-          <img src="${poster}">
-        </div>
+        <img src="${posterPath}" alt="${title}">
         <div class="movie-info">
-          <h3 class="movie-title">${movie.title}</h3>
-          <div class="movie-meta">
-            <span class="rating">★ ${rating}</span>
-            <span class="year">${year}</span>
-          </div>
+          <h3>${title}</h3>
+          <p>📅 ${year} | ⭐ ${item.vote_average ? item.vote_average.toFixed(1) : 'N/A'}</p>
         </div>
       `;
 
-      // 🌟 ရုပ်ရှင်ကို Click နှိပ်လိုက်ရင် လုပ်ဆောင်မည့်အရာ 🌟
+      // နှိပ်လိုက်ပါက Link ပွင့်မည့် စနစ်
       card.onclick = () => {
-        const id = movie.id.toString();
+        const id = item.id.toString();
 
         if (myMovieLinks[id]) {
-          // Link ထည့်ထားရင် အဲဒီ Link ဆီ တိုက်ရိုက်သွားမည်
           window.open(myMovieLinks[id], '_blank');
         } else {
-          // Link မထည့်ရသေးရင် အသိပေးမည်
-          alert(`"${movie.title}" အတွက် Link မထည့်ရသေးပါခင်ဗျာ။`);
+          alert(`"${title}" အတွက် Link မထည့်ရသေးပါခင်ဗျာ။`);
         }
       };
 
       grid.appendChild(card);
     });
-
   } catch (error) {
-    grid.innerHTML = "<p>Data ခေါ်မရပါ။ API Key သေချာ ထည့်ထားလား စစ်ပေးပါ။</p>";
+    console.error("Data ခေါ်ယူရာတွင် အမှားဖြစ်ပေါ်နေသည် - ", error);
   }
 }
 
-// Search လုပ်သည့် စနစ်
-function searchMovie() {
-  const query = document.getElementById("searchInput").value;
-  if (query) {
-    fetchMovies(`https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(query)}`);
-  } else {
-    fetchMovies();
-  }
-}
-
-// App စတင်ပွင့်ချိန်တွင် ရုပ်ရှင်များ ခေါ်ပြမည်
-document.addEventListener("DOMContentLoaded", () => {
-  fetchMovies();
-});
+// Website စတင်ပွင့်သည်နှင့် Data များ ဆွဲယူမည်
+document.addEventListener("DOMContentLoaded", loadMedia);
