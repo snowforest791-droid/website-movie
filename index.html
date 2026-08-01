@@ -1,45 +1,31 @@
 <!DOCTYPE html>
-<html lang="my">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Anniverse - Movies & Series</title>
+  <title>Cinema Stream - Movies & TV Series</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- Top Navbar -->
-  <nav class="navbar">
-    <div class="logo">Anni<span>Verse</span></div>
-    <div class="search-box">
-      <input type="text" id="searchInput" placeholder="ရုပ်ရှင်များ ရှာဖွေရန်..." onkeyup="searchMovie()">
+  <!-- Header Section -->
+  <header class="navbar">
+    <div class="logo">🍿 CINEMA STREAM</div>
+    
+    <!-- Filter Section (Movies / Series Switcher) -->
+    <div class="filter-container">
+      <select id="typeSelect" onchange="loadMedia()">
+        <option value="movie">🎬 Movies (ရုပ်ရှင်များ)</option>
+        <option value="tv">📺 TV Series (စီးရီးများ)</option>
+      </select>
     </div>
-  </nav>
+  </header>
 
-  <!-- Filter Section -->
-  <div class="filter-container">
-    <select id="typeSelect" onchange="applyFilter()">
-      <option value="movie">🎬 Movies (ရုပ်ရှင်များ)</option>
-      <option value="tv">📺 TV Series (စီးရီးများ)</option>
-    </select>
-
-    <select id="genreSelect" onchange="applyFilter()">
-      <option value="">အမျိုးအစား အားလုံး (All Genres)</option>
-    </select>
-
-    <select id="yearSelect" onchange="applyFilter()">
-      <option value="">ခုနှစ် အားလုံး (All Years)</option>
-      <option value="2026">2026</option>
-      <option value="2025">2025</option>
-      <option value="2024">2024</option>
-      <option value="2023">2023</option>
-      <option value="2022">2022</option>
-    </select>
-  </div>
-
-  <!-- Movie Cards Display -->
+  <!-- Movie/Series Grid Container -->
   <main class="container">
-    <div class="movie-grid" id="movieGrid"></div>
+    <div id="movieGrid" class="movie-grid">
+      <!-- Media Cards များကို JavaScript မှ Dynamic ထည့်ပေးမည် -->
+    </div>
   </main>
 
   <script src="script.js"></script>
