@@ -5,10 +5,14 @@ const TMDB_API_KEY = "a671d00101a4c0b0dbb5ed9703441f3d"; // သင့် TMDb AP
 
 // 🌟 ဒီနေရာမှာ ရုပ်ရှင် ID နံပါတ်နဲ့ Link ကို ယှဉ်ထည့်ပေးရုံပါပဲ 🌟
 const myMovieLinks = {
+  // Movies
   "1083381": "https://t.me/c/4351330970/6/60",   // backrooms
   "1127384": "https://t.me/c/4351330970/6/7",  // deep water
   "1227877": "https://t.me/c/4351330970/6/33",  // i love booster
   "1202033": "https://t.me/c/4351330970/6/41"     //enola 3
+  
+  // TV Series
+"278178": "https://t.me/c/4351330970/16/24",   // i will find you (TV Series))
 };
 
 
