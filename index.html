@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cinema Stream - Trailers & New Releases</title>
+  <title>Cinema Stream - Reviews & Downloads</title>
   <link rel="stylesheet" href="style.css">
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -40,10 +40,10 @@
   </aside>
   <div id="menuOverlay" class="menu-overlay"></div>
 
-  <!-- Main Content -->
+  <!-- Main Content Area -->
   <main class="main-content" id="mainContent">
     
-    <!-- 🔥 Trending Today (ယနေ့ ရေပန်းအစားဆုံး) -->
+    <!-- Trending Today -->
     <section class="content-section">
       <div class="section-header">
         <h2>🔥 Trending Today</h2>
@@ -53,7 +53,7 @@
       </div>
     </section>
 
-    <!-- 🆕 Now Playing / Latest Movies (လတ်တလော ထွက်ရှိထားသော ရုပ်ရှင်အသစ်များ) -->
+    <!-- Latest Movies -->
     <section class="content-section" id="nowPlayingSection">
       <div class="section-header">
         <h2>🆕 Latest Released Movies</h2>
@@ -63,7 +63,7 @@
       </div>
     </section>
 
-    <!-- 📺 On The Air TV Series (လတ်တလော ထုတ်လွှင့်နေသော စီးရီးများ) -->
+    <!-- Latest Series -->
     <section class="content-section" id="onAirSection">
       <div class="section-header">
         <h2>📺 Latest Airing Series</h2>
@@ -73,7 +73,7 @@
       </div>
     </section>
 
-    <!-- 🗓️ Upcoming Movies (မကြာမီ ထွက်ရှိမည့် ရုပ်ရှင်အသစ်များ) -->
+    <!-- Upcoming Movies -->
     <section class="content-section" id="upcomingSection">
       <div class="section-header">
         <h2>🗓️ Coming Soon (Upcoming)</h2>
@@ -85,14 +85,25 @@
 
   </main>
 
-  <!-- YouTube Trailer Player Modal -->
-  <div id="playerModal" class="modal">
-    <div class="modal-content">
-      <span class="close-btn" id="closeModal">&times;</span>
-      <iframe id="videoIframe" src="" frameborder="0" allowfullscreen allow="autoplay; encrypted-media"></iframe>
+  <!-- 🎬 Movie Details, Synopsis & Download Links Modal -->
+  <div id="detailModal" class="modal">
+    <div class="modal-card">
+      <span class="close-btn" id="closeDetailModal">&times;</span>
+      
+      <div class="modal-body-content" id="modalBody">
+        <!-- JS Dynamic Content -->
+      </div>
     </div>
   </div>
 
-  <script src="script.js?v=3"></script>
+  <!-- 📺 Trailer Video Modal -->
+  <div id="trailerModal" class="modal">
+    <div class="modal-card video-card">
+      <span class="close-btn" id="closeTrailerModal">&times;</span>
+      <iframe id="trailerIframe" src="" frameborder="0" allowfullscreen allow="autoplay; encrypted-media"></iframe>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
