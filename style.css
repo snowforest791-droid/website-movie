@@ -1,4 +1,4 @@
-/* Color Palette & Basic Setup */
+
 :root {
   --bg-color: #0f1624;
   --nav-bg: #151f32;
@@ -38,7 +38,7 @@ body {
 .logo {
   font-size: 22px;
   font-weight: 700;
-  color: var(--accent-blue);
+  color: #ff0000; /* YouTube Red Accent */
   display: flex;
   align-items: center;
   gap: 8px;
@@ -52,7 +52,7 @@ body {
   color: var(--text-main);
 }
 
-/* Side Menu */
+/* Sidebar Menu */
 .side-menu {
   position: fixed;
   top: 0;
@@ -98,76 +98,63 @@ body {
 }
 .menu-links a.active, .menu-links a:hover { color: white; }
 
-/* Ads */
-.ad-container { padding: 15px; text-align: center; }
-.ad-container img { width: 100%; max-width: 600px; border-radius: 5px; margin-bottom: 10px; }
-
-/* Sections */
-.main-content { padding: 0 15px 30px; }
+/* Main Content & Cards */
+.main-content { padding: 10px 15px 30px; }
 .section-header {
   display: flex; justify-content: space-between; align-items: center;
-  margin-bottom: 15px; margin-top: 20px;
+  margin-bottom: 15px; margin-top: 25px;
 }
-.section-header h2 { font-size: 18px; font-weight: 600; display: flex; align-items: center; gap: 8px;}
-.view-all-btn {
-  background-color: var(--accent-blue); color: white;
-  border: none; padding: 6px 14px; border-radius: 6px;
-  font-size: 12px; font-weight: bold; cursor: pointer;
-}
+.section-header h2 { font-size: 18px; font-weight: 600; }
 
-/* Horizontal Scroll Container */
 .scroll-container {
   display: flex; gap: 15px; overflow-x: auto; padding-bottom: 10px;
-  scrollbar-width: none; /* Firefox */
+  scrollbar-width: none;
 }
-.scroll-container::-webkit-scrollbar { display: none; } /* Chrome */
+.scroll-container::-webkit-scrollbar { display: none; }
 
-/* Grid Container */
 .grid-container {
   display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px;
 }
 
-/* Movie Card Design (Homie Style) */
 .movie-card {
   background-color: var(--card-bg);
   border-radius: 10px; overflow: hidden;
-  flex: 0 0 150px; /* For scroll container */
+  flex: 0 0 150px;
   cursor: pointer;
+  transition: transform 0.2s ease;
 }
-.grid-container .movie-card { flex: auto; } /* Reset flex for grid */
+.movie-card:hover { transform: scale(1.03); }
+.grid-container .movie-card { flex: auto; }
 
 .poster-wrapper { position: relative; width: 100%; aspect-ratio: 2 / 3; }
 .poster-wrapper img { width: 100%; height: 100%; object-fit: cover; }
 
 /* Badges */
-.badge-quality {
+.badge-trailer {
   position: absolute; top: 8px; left: 8px;
-  background: var(--badge-bg); color: #ff3b3b;
-  font-size: 10px; font-weight: bold; padding: 2px 6px; border-radius: 4px;
+  background: #ff0000; color: #ffffff;
+  font-size: 10px; font-weight: bold; padding: 3px 6px; border-radius: 4px;
+  display: flex; align-items: center; gap: 3px;
 }
 .badge-rating {
   position: absolute; top: 8px; right: 8px;
   background: var(--badge-bg); color: #fff;
   font-size: 11px; font-weight: bold; padding: 2px 6px; border-radius: 4px;
-  display: flex; align-items: center; gap: 3px;
 }
-.badge-rating i { color: #f5c518; font-size: 10px;}
-.badge-season {
-  position: absolute; bottom: 8px; left: 8px;
-  background: var(--accent-blue); color: #fff;
-  font-size: 10px; font-weight: bold; padding: 3px 8px; border-radius: 4px;
-}
+.badge-rating i { color: #f5c518; font-size: 10px; }
 
 /* Card Info */
 .card-info { padding: 10px; }
 .card-info h3 {
-  font-size: 14px; margin-bottom: 5px;
+  font-size: 13px; margin-bottom: 4px;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
-.card-meta { font-size: 12px; color: var(--accent-blue); margin-bottom: 3px;}
-.card-genres { font-size: 11px; color: var(--text-muted); 
+.card-meta { font-size: 11px; color: var(--accent-blue); margin-bottom: 2px; }
+.card-genres { font-size: 10px; color: var(--text-muted); 
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
+
+.loading { color: var(--text-muted); padding: 10px 0; }
 
 /* Modal Player */
 .modal {
@@ -176,11 +163,12 @@ body {
   z-index: 2000; justify-content: center; align-items: center;
 }
 .modal-content {
-  position: relative; width: 100%; max-width: 900px; height: 50vw; max-height: 80vh; background: #000;
+  position: relative; width: 90%; max-width: 800px; height: 50vw; max-height: 450px; background: #000;
+  border-radius: 8px; overflow: hidden;
 }
-@media (max-width: 768px) { .modal-content { height: 30vh; width: 100%; } }
+@media (max-width: 768px) { .modal-content { height: 40vh; } }
 .modal-content iframe { width: 100%; height: 100%; border: none; }
 .close-btn {
-  position: absolute; top: -35px; right: 10px;
+  position: absolute; top: -35px; right: 5px;
   color: #fff; font-size: 30px; cursor: pointer;
 }
