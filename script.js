@@ -25,22 +25,15 @@ closeMenuBtn.addEventListener("click", toggleMenu);
 menuOverlay.addEventListener("click", toggleMenu);
 searchIcon.addEventListener("click", toggleMenu);
 
-// Page Load - Fetch Auto Update Endpoints
+// Load Main Lists
 document.addEventListener("DOMContentLoaded", () => {
-  // ၁။ ယနေ့ ရေပန်းအစားဆုံး
   fetchMovies(`${BASE_URL}/trending/all/day?api_key=${TMDB_API_KEY}`, "trendingToday", "mixed");
-  
-  // ၂။ လတ်တလော ထွက်ရှိထားသော ရုပ်ရှင်အသစ်များ (Auto Updates)
   fetchMovies(`${BASE_URL}/movie/now_playing?api_key=${TMDB_API_KEY}`, "nowPlayingMovies", "movie");
-  
-  // ၃။ လတ်တလော ထုတ်လွှင့်နေသော ဇာတ်လမ်းတွဲများ (Auto Updates)
   fetchMovies(`${BASE_URL}/tv/on_the_air?api_key=${TMDB_API_KEY}`, "onAirSeries", "tv");
-  
-  // ၄။ မကြာမီ ထွက်ရှိမည့် ရုပ်ရှင်များ (Upcoming)
   fetchMovies(`${BASE_URL}/movie/upcoming?api_key=${TMDB_API_KEY}`, "upcomingMovies", "movie");
 });
 
-// Real-Time Search
+// Search Logic
 let delayTimer;
 searchInput.addEventListener("input", (e) => {
   clearTimeout(delayTimer);
@@ -61,7 +54,7 @@ searchInput.addEventListener("input", (e) => {
   }, 600);
 });
 
-// Fetch Content & Display Cards
+// Fetch Movies Grid/Scroll list
 async function fetchMovies(url, containerId, defaultType) {
   const container = document.getElementById(containerId);
   if (!container) return;
@@ -85,7 +78,7 @@ async function fetchMovies(url, containerId, defaultType) {
       const year = releaseDate ? releaseDate.split("-")[0] : "N/A";
       const rating = item.vote_average ? item.vote_average.toFixed(1) : "NR";
       const poster = item.poster_path ? IMG_URL + item.poster_path : "https://via.placeholder.com/500x750?text=No+Poster";
-      const genreNames = item.genre_ids ? item.genre_ids.map(id => genreMap[id]).filter(Boolean).slice(0, 2).join(", ") : "Unknown";
+      const genreNames = item.genre_ids ? item.genre_ids.map(id => genreMap[id]).filter(Boolean).slice(0, 2).join(", ") : "Movie";
 
       const card = document.createElement("div");
       card.className = "movie-card";
@@ -93,7 +86,6 @@ async function fetchMovies(url, containerId, defaultType) {
       card.innerHTML = `
         <div class="poster-wrapper">
           <img src="${poster}" alt="${title}" loading="lazy">
-          <div class="badge-trailer"><i class="fa-solid fa-play"></i> Trailer</div>
           <div class="badge-rating"><i class="fa-solid fa-star"></i> ${rating}</div>
         </div>
         <div class="card-info">
@@ -103,9 +95,9 @@ async function fetchMovies(url, containerId, defaultType) {
         </div>
       `;
 
-      // Card Click -> Play YouTube Trailer
+      // Card နှိပ်လိုက်ပါက Detail Box (Synopsis + Downloads) ပွင့်မည်
       card.addEventListener("click", () => {
-        playYouTubeTrailer(item.id, mediaType);
+        openMovieDetail(item.id, mediaType);
       });
 
       container.appendChild(card);
@@ -115,42 +107,127 @@ async function fetchMovies(url, containerId, defaultType) {
   }
 }
 
-// Fetch Official YouTube Trailer from TMDb API & Embed
-async function playYouTubeTrailer(id, type) {
-  const modal = document.getElementById("playerModal");
-  const iframe = document.getElementById("videoIframe");
+// 🎬 Fetch Movie Details, Synopsis & Download Links
+async function openMovieDetail(id, type) {
   const actualType = type === 'tv' ? 'tv' : 'movie';
+  const detailModal = document.getElementById("detailModal");
+  const modalBody = document.getElementById("modalBody");
+
+  modalBody.innerHTML = "<p style='color:#fff;'>အချက်အလက်များကို ခေါ်ယူနေပါသည်...</p>";
+  detailModal.style.display = "flex";
 
   try {
-    const videoUrl = `${BASE_URL}/${actualType}/${id}/videos?api_key=${TMDB_API_KEY}&language=en-US`;
-    const res = await fetch(videoUrl);
+    const res = await fetch(`${BASE_URL}/${actualType}/${id}?api_key=${TMDB_API_KEY}&append_to_response=videos`);
     const data = await res.json();
 
-    // YouTube Official Trailer ကို အဓိက ရှာမည်
-    let trailer = data.results.find(v => v.site === "YouTube" && v.type === "Trailer");
-    
-    // Trailer သီးသန့်မတွေ့ပါက အခြား YouTube Video (Teaser/Clip) ကို ရှာမည်
-    if (!trailer) {
-      trailer = data.results.find(v => v.site === "YouTube");
+    const title = data.title || data.name;
+    const releaseDate = data.release_date || data.first_air_date || "";
+    const year = releaseDate ? releaseDate.split("-")[0] : "N/A";
+    const overview = data.overview || "ဇာတ်လမ်းအညွှန်း မရှိသေးပါ။";
+
+    // Trailer Key
+    let trailerKey = "";
+    if (data.videos && data.videos.results.length > 0) {
+      const trailer = data.videos.results.find(v => v.site === "YouTube" && v.type === "Trailer") || data.videos.results[0];
+      if (trailer) trailerKey = trailer.key;
     }
 
-    if (trailer) {
-      // YouTube Embed Video Player ကို Autoplay ဖြင့် ပွင့်စေမည်
-      iframe.src = `https://www.youtube.com/embed/${trailer.key}?autoplay=1`;
-      modal.style.display = "flex";
-    } else {
-      alert("ဒီရုပ်ရှင်/ဇာတ်လမ်းတွဲအတွက် Official YouTube Trailer မတွေ့ရှိသေးပါဗျာ။");
-    }
+    // Modal Content HTML (အစ်ကို ပို့ထားတဲ့ ပုံအတိုင်း ဖွဲ့စည်းထားခြင်း)
+    modalBody.innerHTML = `
+      <div class="tab-header">
+        <button class="tab-btn active">Synopsis</button>
+        <button class="tab-btn" onclick="alert('Cast List feature coming soon!')">Cast List</button>
+      </div>
+
+      <div class="synopsis-box">
+        <h2 class="synopsis-title">${title} (${year})</h2>
+        <div class="synopsis-divider">****************************</div>
+        <p class="synopsis-text">${overview}</p>
+      </div>
+
+      ${trailerKey ? `
+        <div class="trailer-btn-container">
+          <button class="watch-trailer-btn" onclick="playTrailer('${trailerKey}')">
+            <i class="fa-solid fa-play"></i> Watch Official Trailer
+          </button>
+        </div>
+      ` : ''}
+
+      <div class="download-section">
+        <h2 class="download-section-title">Download Links</h2>
+        <table class="download-table">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Server Name</th>
+              <th>Size</th>
+              <th>Resolution</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td><a href="https://usersdrive.com" target="_blank" class="server-link">Usersdrive</a></td>
+              <td>1.60GB</td>
+              <td><span class="res-badge res-1080p">1080p FULL HD</span></td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td><a href="https://megaup.net" target="_blank" class="server-link">Megaup</a></td>
+              <td>1.60GB</td>
+              <td><span class="res-badge res-1080p">1080p FULL HD</span></td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td><a href="https://yoteshin.com" target="_blank" class="server-link">Yoteshin</a></td>
+              <td>1.60GB</td>
+              <td><span class="res-badge res-1080p">1080p FULL HD</span></td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td><a href="https://usersdrive.com" target="_blank" class="server-link">Usersdrive</a></td>
+              <td>851MB</td>
+              <td><span class="res-badge res-720p">720p HD</span></td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td><a href="https://megaup.net" target="_blank" class="server-link">Megaup</a></td>
+              <td>851MB</td>
+              <td><span class="res-badge res-720p">720p HD</span></td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td><a href="https://yoteshin.com" target="_blank" class="server-link">Yoteshin</a></td>
+              <td>851MB</td>
+              <td><span class="res-badge res-720p">720p HD</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    `;
+
   } catch (err) {
-    console.error("Trailer Error:", err);
-    alert("Trailer ခေါ်ယူရာတွင် အမှားအယွင်းရှိနေပါသည်။");
+    console.error("Detail Error:", err);
+    modalBody.innerHTML = "<p style='color:red;'>အချက်အလက်များ ခေါ်ယူရာတွင် အမှားအယွင်း ရှိနေပါသည်။</p>";
   }
 }
 
-// Close Modal logic
-document.getElementById("closeModal").addEventListener("click", () => {
-  const modal = document.getElementById("playerModal");
-  const iframe = document.getElementById("videoIframe");
-  iframe.src = ""; // Stop video playback
-  modal.style.display = "none";
+// Open Trailer Video
+function playTrailer(key) {
+  const trailerModal = document.getElementById("trailerModal");
+  const iframe = document.getElementById("trailerIframe");
+  iframe.src = `https://www.youtube.com/embed/${key}?autoplay=1`;
+  trailerModal.style.display = "flex";
+}
+
+// Close Modals Logic
+document.getElementById("closeDetailModal").addEventListener("click", () => {
+  document.getElementById("detailModal").style.display = "none";
+});
+
+document.getElementById("closeTrailerModal").addEventListener("click", () => {
+  const trailerModal = document.getElementById("trailerModal");
+  const iframe = document.getElementById("trailerIframe");
+  iframe.src = "";
+  trailerModal.style.display = "none";
 });
