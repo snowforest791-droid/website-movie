@@ -3,37 +3,92 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cinema Stream</title>
+  <title>Cinema Stream (Homie Style)</title>
   <link rel="stylesheet" href="style.css">
+  <!-- FontAwesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-  <!-- Header & Navigation -->
+  <!-- Navigation Bar -->
   <header class="navbar">
-    <h1 class="logo">CINEMA STREAM</h1>
-    
-    <div class="controls">
-      <input type="text" id="searchInput" placeholder="ရုပ်ရှင် / စီးရီး ရှာရန်...">
-      
-      <select id="typeSelect">
-        <option value="movie">Movies (ရုပ်ရှင်)</option>
-        <option value="tv">TV Series (ဇာတ်လမ်းတွဲ)</option>
-      </select>
-
-      <select id="genreSelect">
-        <option value="">အမျိုးအစား အားလုံး</option>
-      </select>
+    <div class="logo">
+      <i class="fa-solid fa-play"></i> Cinema <span>TV</span>
+    </div>
+    <div class="nav-icons">
+      <i class="fa-solid fa-magnifying-glass" id="searchIcon"></i>
+      <i class="fa-solid fa-bars" id="menuBtn"></i>
     </div>
   </header>
 
-  <!-- Movie Cards Display -->
-  <main class="container">
-    <div id="movieGrid" class="movie-grid">
-      <p class="loading">ရုပ်ရှင်များကို ခေါ်ယူနေပါသည်။ ခေတ္တစောင့်ဆိုင်းပေးပါ...</p>
+  <!-- Sidebar Menu (Mobile) -->
+  <aside id="sideMenu" class="side-menu">
+    <div class="menu-header">
+      <div class="logo"><i class="fa-solid fa-play"></i> Cinema <span>TV</span></div>
+      <i class="fa-solid fa-xmark close-menu" id="closeMenuBtn"></i>
     </div>
+    <div class="search-box">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" id="searchInput" placeholder="Search movies, TV shows...">
+    </div>
+    <ul class="menu-links">
+      <li><a href="#" class="active">Home</a></li>
+      <li><a href="#moviesSection">Movies</a></li>
+      <li><a href="#seriesSection">Series</a></li>
+    </ul>
+  </aside>
+  <div id="menuOverlay" class="menu-overlay"></div>
+
+  <!-- Ad Banners (Placeholder) -->
+  <div class="ad-container">
+    <img src="https://via.placeholder.com/800x100/228B22/FFFFFF?text=Ad+Banner+1" alt="Ad">
+    <img src="https://via.placeholder.com/800x100/8A2BE2/FFFFFF?text=Ad+Banner+2" alt="Ad">
+  </div>
+
+  <!-- Main Content -->
+  <main class="main-content" id="mainContent">
+    
+    <!-- Trending Movies (Horizontal Scroll) -->
+    <section class="content-section">
+      <div class="section-header">
+        <h2>🔥 Trending Movies</h2>
+        <button class="view-all-btn">View All</button>
+      </div>
+      <div class="scroll-container" id="trendingMovies">
+        <!-- JS will populate -->
+      </div>
+    </section>
+
+    <!-- Trending Series (Horizontal Scroll) -->
+    <section class="content-section">
+      <div class="section-header">
+        <h2>🔥 Trending Series</h2>
+        <button class="view-all-btn">View All</button>
+      </div>
+      <div class="scroll-container" id="trendingSeries">
+        <!-- JS will populate -->
+      </div>
+    </section>
+
+    <!-- Ad Banner 2 -->
+    <div class="ad-container">
+      <img src="https://via.placeholder.com/800x100/FF4500/FFFFFF?text=Middle+Ad+Banner" alt="Ad">
+    </div>
+
+    <!-- Movies (Grid) -->
+    <section class="content-section" id="moviesSection">
+      <div class="section-header">
+        <h2>Movies</h2>
+        <button class="view-all-btn">View All</button>
+      </div>
+      <div class="grid-container" id="moviesGrid">
+        <!-- JS will populate -->
+      </div>
+    </section>
+
   </main>
 
-  <!-- VidSrc.pro Embedded Video Player Modal -->
+  <!-- Player Modal (VidSrc) -->
   <div id="playerModal" class="modal">
     <div class="modal-content">
       <span class="close-btn" id="closeModal">&times;</span>
@@ -41,6 +96,6 @@
     </div>
   </div>
 
-  <script src="script.js?v=2"></script>
+  <script src="script.js"></script>
 </body>
 </html>
